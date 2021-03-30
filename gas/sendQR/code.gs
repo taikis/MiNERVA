@@ -56,7 +56,7 @@ function assignId() {
  */
 function editSheet(id, ansData,qrURL) {
   var editArray = [];
-  var ss = SpreadsheetApp.openById("");
+  var ss = SpreadsheetApp.openById("ID");
   var sheet = ss.getSheetByName("freshersName");
   editArray.push(id);
   editArray.push("=IMAGE(\""+qrURL+"\")");

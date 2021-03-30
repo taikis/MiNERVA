@@ -9,7 +9,7 @@ function sendForm(e) {
  */
 function editSheet(ansData) {
   var editArray = [];
-  var ss = SpreadsheetApp.openById("1lg5USZfJMMTMGLsiaeoWkX74DZw27LYf4jb7R_oxaFQ");
+  var ss = SpreadsheetApp.openById("ID");
   var sheet = ss.getSheetByName("NoPhone");
   var id =ansData[0].getResponse();
   var row = Number(id)-200000 + 1;
