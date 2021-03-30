@@ -1,203 +1,79 @@
 window.MINERVA = window.MINERVA || {};
 
 MINERVA.dropdown = (() => {
-	groupOp = [
-		{
-			name: "あぐり",
-			id: 101,
-		},
-		{
-			name: "計算技術研究会",
-			id: 102,
-		},
-		{
-			name: "航空工学研究会HoPE",
-			id: 103,
-		},
-		{
-			name: "電気研究会",
-			id: 104,
-		},
-		{
-			name: "空手道部",
-			id: 105,
-		},
-		{
-			name: "自動車研究会",
-			id: 106,
-		},
-		{
-			name: "Libertyer",
-			id: 107,
-		},
-		{
-			name: "法政大学放送研究会MediaWave",
-			id: 108,
-		},
-		{
-			name: "法政大学工学部マンドリンクラブ",
-			id: 109,
-		},
-		{
-			name: "小金井groovy",
-			id: 110,
-		},
-		{
-			name: "ロック研究会",
-			id: 111,
-		},
-		{
-			name: "ウエスタンプレイボーイズ",
-			id: 112,
-		},
-		{
-			name: "社交舞踏研究会",
-			id: 113,
-		},
-		{
-			name: "将棋部",
-			id: 114,
-		},
-		{
-			name: "漫画研究会",
-			id: 115,
-		},
-		{
-			name: "小金井鉄道研究会",
-			id: 116,
-		},
-		{
-			name: "写真技術研究会",
-			id: 117,
-		},
-		{
-			name: "ESS",
-			id: 118,
-		},
-		{
-			name: "ポケモンだいすきクラブ",
-			id: 119,
-		},
-		{
-			name: "バレーボール部",
-			id: 120,
-		},
-		{
-			name: "少林寺拳法部",
-			id: 121,
-		},
-		{
-			name: "スキー部",
-			id: 122,
-		},
-		{
-			name: "バスケットボール部",
-			id: 123,
-		},
-		{
-			name: "ワンダーフォーゲル部",
-			id: 124,
-		},
-		{
-			name: "陸上競技部",
-			id: 125,
-		},
-		{
-			name: "水泳部",
-			id: 126,
-		},
-		{
-			name: "ラグビー部",
-			id: 127,
-		},
-		{
-			name: "卓球部",
-			id: 128,
-		},
-		{
-			name: "合気道部",
-			id: 129,
-		},
-		{
-			name: "サッカー部",
-			id: 130,
-		},
-		{
-			name: "機械研究会",
-			id: 131,
-		},
-		{
-			name: "柔道部",
-			id: 132,
-		},
-		{
-			name: "アルティメット部",
-			id: 133,
-		},
-		{
-			name: "ソフトテニス部",
-			id: 134,
-		},
-		{
-			name: "応援団",
-			id: 135,
-		},
-		{
-			name: "体育会航空部",
-			id: 136,
-		},
-		{
-			name: "オープンキャンパススタッフ",
-			id: 137,
-		},
-		{
-			name: "法政大学交響楽団",
-			id: 138,
-		},
-		{
-			name: "法政大学エレクトーンサークルCOSMOS",
-			id: 139,
-		},
-		{
-			name: "k-boys",
-			id: 140,
-		},
-		{
-			name: "TCG同好会",
-			id: 141,
-		},
-	];
-	placeOp = [
-		{
-			name: "中庭ブース",
-			id: "01",
-		},
-		{
-			name: "部室",
-			id: "02",
-		},
-		{
-			name: "展示物",
-			id: "03",
-		},
-	];
+	let generalData;
+	let specialData;
+	let generalLen;
+	let specialLen;
+	let isScClub = false;
+
+	function loadData() {
+		$.ajax({
+			type: "GET",
+			url: "./js/data_general.json",
+			async: false,
+			success: function (data) {
+				generalData = data;
+				generalLen = data.length;
+			},
+		});
+		$.ajax({
+			type: "GET",
+			url: "./js/data_special.json",
+			async: false,
+			success: function (data) {
+				specialData = data;
+				specialLen = data.length;
+			},
+		});
+	}
+
 	function makeDropdown() {
 		$(document).ready(function ($) {
-			for (var i in groupOp) {
-				$("#drop-group").append(
-					"<option value=" + groupOp[i].id + ">" + groupOp[i].name + "</option>"
-				);
-			}
-			for (var i in placeOp) {
+			loadData();
+			$.getJSON("./js/data_club.json", (data) => {
+				const dataLen = data.length;
+				for (var i = 0; i < dataLen; i++) {
+					$("#drop-group").append(
+						`<option value=${data[i].id}>${data[i].name}</option>`
+					);
+				}
+			});
+			for (var i in generalData) {
 				$("#drop-place").append(
-					"<option value=" + placeOp[i].id + ">" + placeOp[i].name + "</option>"
+					`<option value=${generalData[i].id}>${generalData[i].name}</option>`
 				);
 			}
 		});
 	}
+	function changeDropdown() {
+		console.log(specialData);
+
+		if ($("#drop-group").val() == "001" && isScClub == false) {
+			isScClub = true;
+			for (var i = generalLen; i < specialLen; ++i) {
+				$("#drop-place").append(
+					`<option value=${specialData[i].id}>${specialData[i].name}</option>`
+				);
+			}
+		}
+		if ($("#drop-group").val() != "001" && isScClub == true) {
+			isScClub = false;
+			$('select[name="place-id"] option').remove();
+			$("#drop-place").append(
+				`<option disabled selected value>選択してください</option>`
+			);
+			for (var i in generalData) {
+				$("#drop-place").append(
+					`<option value=${generalData[i].id}>${generalData[i].name}</option>`
+				);
+			}
+		}
+	}
 
 	return {
 		makeDropdown,
+		changeDropdown,
 	};
 })();
 
@@ -258,7 +134,7 @@ MINERVA.modal = (() => {
 	const entryBtn = document.querySelector("#js-entry");
 
 	function open(qrData) {
-		result.value = qrData;
+		result.innerHTML = qrData;
 		modal.classList.add("is-show");
 	}
 
@@ -268,7 +144,7 @@ MINERVA.modal = (() => {
 	}
 
 	function entryData() {
-		MINERVA.sendData.send(result.value);
+		MINERVA.sendData.send(result.innerHTML);
 		modal.classList.remove("is-show");
 		MINERVA.reader.findQR();
 	}
@@ -325,22 +201,22 @@ MINERVA.sendData = (() => {
 		if (0 < parameter) {
 			title.innerHTML = "送信成功";
 			modal.classList.add("success");
-		}else{
+		} else {
 			title.innerHTML = "送信失敗";
 			modal.classList.add("fail");
 		}
 		switch (parameter) {
 			case 1:
-				result.value = "続けてスキャンできます";
+				result.innerHTML = "続けてスキャンできます";
 				break;
 			case -1:
-				result.value = "登録番号がフォーマットと一致しません。";
+				result.innerHTML = "登録番号がフォーマットと一致しません。";
 				break;
 			case -2:
-				result.value = "団体名と場所を指定してください";
+				result.innerHTML = "団体名と場所を指定してください";
 				break;
 			case -3:
-				result.value = "サーバーエラー\n時間をおいてください";
+				result.innerHTML = "サーバーエラー\n時間をおいてください";
 				break;
 		}
 		modal.classList.add("is-show");
@@ -361,3 +237,6 @@ MINERVA.sendData = (() => {
 
 MINERVA.dropdown.makeDropdown();
 if (MINERVA.reader) MINERVA.reader.initCamera();
+$('select[name="group-id"]').change(function () {
+	MINERVA.dropdown.changeDropdown();
+});
