@@ -27,18 +27,18 @@ MINERVA.dropdown = (() => {
 	}
 	function changeDropdown() {
 		$('select[name="place-id"] option').remove(); // これまでのを削除
-		let group_id = $("#drop-group").val()
-		let place_data_extract = place_data.find((val)=>{
+		let group_id = $("#drop-group").val();
+		let place_data_extract = place_data.find((val) => {
 			return val.group_id == group_id;
-		})
+		});
 		$("#drop-place").append(
 			`<option disabled selected value>選択してください</option>`
 		);
-		place_data_extract.place.forEach((place)=>{
+		place_data_extract.place.forEach((place) => {
 			$("#drop-place").append(
 				`<option value=${place.place_id}>${place.place_name}</option>`
 			);
-		})
+		});
 	}
 
 	return {
@@ -69,15 +69,32 @@ MINERVA.reader = (() => {
 		}
 	}
 
-	function initCamera() {
+	function getCamera(device_id = null) {
+		let devices_list = [];
+		var video_setting;
+		const w = 1280;
+		const h = 720;
+		if (device_id) {
+			video_setting = {
+				deviceId: device_id,
+				width: w,
+				height: h,
+				aspectRatio: { exact: w / h },
+			};
+		} else {
+			video_setting = {
+				facingMode: {
+					exact: "environment",
+				},
+				width: w,
+				height: h,
+				aspectRatio: { exact: w / h },
+			};
+		}
 		navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
-				video: {
-					facingMode: {
-						exact: "environment",
-					},
-				},
+				video: video_setting,
 			})
 			.then((stream) => {
 				video.srcObject = stream;
@@ -85,15 +102,51 @@ MINERVA.reader = (() => {
 					video.play();
 					findQR();
 				};
+				console.log($("select#camera-souce").children().length);
+				//許可を得た後にドロップダウンを作成
+				if ($("select#camera-souce").children().length == 1) {
+					navigator.mediaDevices.enumerateDevices().then((devices) => {
+						devices.forEach((val) => {
+							if (val.kind == "videoinput") {
+								devices_list.push(val);
+							}
+						});
+						//devices_list = devices;
+						console.log(devices_list);
+						devices_list.forEach((device) => {
+							$("#camera-souce").append(
+								`<option value=${device.deviceId}>${device.label}</option>`
+							);
+						});
+					});
+				}
 			})
 			.catch(() => {
 				document.querySelector("#js-unsupported").classList.add("is-show");
 			});
 	}
 
+	function initCamera() {
+		getCamera();
+	}
+
+	function changeCameraSouce() {
+		let stream = video.srcObject;
+		let tracks = stream.getTracks();
+
+		tracks.forEach(function (track) {
+			track.stop();
+		});
+
+		video.srcObject = null;
+		console.log($("select#camera-souce").val());
+		getCamera($("select#camera-souce").val());
+	}
+
 	return {
 		initCamera,
 		findQR,
+		changeCameraSouce,
 	};
 })();
 
@@ -150,8 +203,11 @@ MINERVA.sendData = (() => {
 				},
 			})
 				.done((data) => {
-					if ((data.text = "success")) {
+					console.log(data)
+					if (data == "success") {
 						showAlert(1);
+					} else if (data == "no data") {
+						showAlert(-4);
 					} else {
 						showAlert(-3);
 						console.log(data);
@@ -188,6 +244,9 @@ MINERVA.sendData = (() => {
 			case -3:
 				result.innerHTML = "サーバーエラー\n時間をおいてください";
 				break;
+			case -4:
+				result.innerHTML = "登録されていない番号です";
+				break;
 		}
 		modal.classList.add("is-show");
 	}
@@ -209,4 +268,7 @@ MINERVA.dropdown.makeDropdown();
 if (MINERVA.reader) MINERVA.reader.initCamera();
 $('select[name="group-id"]').change(function () {
 	MINERVA.dropdown.changeDropdown();
+});
+$('select[name="camera-souce-id"]').change(function () {
+	MINERVA.reader.changeCameraSouce();
 });
