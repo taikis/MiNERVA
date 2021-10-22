@@ -1,29 +1,16 @@
 window.MINERVA = window.MINERVA || {};
 
 MINERVA.dropdown = (() => {
-	let generalData;
-	let specialData;
-	let generalLen;
-	let specialLen;
+	let place_data;
 	let isScClub = false;
 
 	function loadData() {
 		$.ajax({
 			type: "GET",
-			url: "./js/data_general.json",
+			url: "./getPlaceData.php",
 			async: false,
 			success: function (data) {
-				generalData = data;
-				generalLen = data.length;
-			},
-		});
-		$.ajax({
-			type: "GET",
-			url: "./js/data_special.json",
-			async: false,
-			success: function (data) {
-				specialData = data;
-				specialLen = data.length;
+				place_data = data;
 			},
 		});
 	}
@@ -31,44 +18,27 @@ MINERVA.dropdown = (() => {
 	function makeDropdown() {
 		$(document).ready(function ($) {
 			loadData();
-			$.getJSON("./js/data_club.json", (data) => {
-				const dataLen = data.length;
-				for (var i = 0; i < dataLen; i++) {
-					$("#drop-group").append(
-						`<option value=${data[i].id}>${data[i].name}</option>`
-					);
-				}
-			});
-			for (var i in generalData) {
-				$("#drop-place").append(
-					`<option value=${generalData[i].id}>${generalData[i].name}</option>`
+			place_data.forEach((group) => {
+				$("#drop-group").append(
+					`<option value=${group.group_id}>${group.group_name}</option>`
 				);
-			}
+			});
 		});
 	}
 	function changeDropdown() {
-		console.log(specialData);
-
-		if ($("#drop-group").val() == "001" && isScClub == false) {
-			isScClub = true;
-			for (var i = generalLen; i < specialLen; ++i) {
-				$("#drop-place").append(
-					`<option value=${specialData[i].id}>${specialData[i].name}</option>`
-				);
-			}
-		}
-		if ($("#drop-group").val() != "001" && isScClub == true) {
-			isScClub = false;
-			$('select[name="place-id"] option').remove();
+		$('select[name="place-id"] option').remove(); // これまでのを削除
+		let group_id = $("#drop-group").val()
+		let place_data_extract = place_data.find((val)=>{
+			return val.group_id == group_id;
+		})
+		$("#drop-place").append(
+			`<option disabled selected value>選択してください</option>`
+		);
+		place_data_extract.place.forEach((place)=>{
 			$("#drop-place").append(
-				`<option disabled selected value>選択してください</option>`
+				`<option value=${place.place_id}>${place.place_name}</option>`
 			);
-			for (var i in generalData) {
-				$("#drop-place").append(
-					`<option value=${generalData[i].id}>${generalData[i].name}</option>`
-				);
-			}
-		}
+		})
 	}
 
 	return {
@@ -164,8 +134,8 @@ MINERVA.sendData = (() => {
 	const modal = document.querySelector("#js-alert");
 	const modalClose = document.querySelector("#js-alert-close");
 
-	function send(fresherId) {
-		if (!/^[0-9]{6}/.test(fresherId)) {
+	function send(visitorId) {
+		if (!/^[A-Z]\d{6}/.test(visitorId)) {
 			showAlert(-1);
 		} else if (!$("#drop-group").val() || !$("#drop-place").val()) {
 			showAlert(-2);
@@ -174,7 +144,7 @@ MINERVA.sendData = (() => {
 				url: "./entryQr.php",
 				type: "POST",
 				data: {
-					fresher_id: fresherId,
+					visitor_id: visitorId,
 					group_id: $("#drop-group").val(),
 					place_id: $("#drop-place").val(),
 				},
@@ -184,7 +154,7 @@ MINERVA.sendData = (() => {
 						showAlert(1);
 					} else {
 						showAlert(-3);
-						console.log(data.text);
+						console.log(data);
 					}
 				})
 				.fail(() => {
