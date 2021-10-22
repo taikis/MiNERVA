@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_Store
 .env
 data_club.json
@@ -5,3 +6,7 @@ data_general.json
 data_special.json
 /.vscode
 .htaccess
+=======
+.env
+.DS_Store
+>>>>>>> eada2d0 (修正,デザイン)
