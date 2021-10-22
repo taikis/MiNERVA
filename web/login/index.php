@@ -9,10 +9,12 @@ session_start();
 
 if(isset($_POST['login'])){
     if(empty($_POST['id'])){
-        $error_id = '団体IDが未入力です';
-    } elseif(empty($_POST['pass'])){
-        $error_pass = 'パスワードが未入力です';
-    } else {
+        $error['id'] = '団体IDが未入力です';
+    }
+    if(empty($_POST['pass'])){
+        $error['pass'] = 'パスワードが未入力です';
+    }
+    if (empty($_error['id']) and empty($_error['pass'])){
         $id = $_POST['id'];
         $password = $_POST['pass'];
 
@@ -27,7 +29,7 @@ if(isset($_POST['login'])){
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 ]
             );
-            if(is_numeric($id)){
+
                 $stmt = $pdo->query("SELECT * FROM nobu_logintest WHERE id = $id");
                 $row = $stmt->fetch();
                 if ($id == $row['ID'] && password_verify($_POST['pass'], $row['pass'])){
@@ -36,11 +38,7 @@ if(isset($_POST['login'])){
                     header("Location: ../home");
                     exit();
                 } else {
-                    echo '団体IDもしくはパスワードが違います';
-                    $error = '団体IDもしくはパスワードが違います';
-                }
-            }else{
-                $error = '団体IDもしくはパスワードが違います';
+                    $error['input'] = '団体IDもしくはパスワードが違います';
             }
         }catch(PDOException $e){
             echo 'データベース接続エラー'.$e->getMessage();
@@ -56,28 +54,66 @@ if(isset($_POST['login'])){
     <head>
         <meta charset="UTF-8">
         <title>団体ログイン</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <link rel="stylesheet" href="css/style.css">
+
     </head>
     <body>
-        <h2>小金井祭　ログインフォーム</h2>
+    <table border="0">
+            <tr>
+                <td>
+                    <div id="Menu">
+                        <input type="checkbox" id="Check">
+                        <label id="Open" for="Check"><img src="img/menu2.png" alt="メニュー" width="50" height="50"></label>
+                        <label id="Close" for="Check"></label>
+                        <nav>
+                            <ul>
+                                <li><a href="#">ホーム</a></li>
+                                <li><a href="#">入場フォーム</a></li>
+                                <li><a href="#">ログイン</a></li>
+                                <li><a href="#">MiNERVA概要</a></li>
+                                <li><a href="https://hosei-u.com/">企画実行委員会ホームページ</a></li>
+                                <li><a href="https://koganeisai.hosei-u.com/">小金井祭ホームページ</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </td>
+                <td><a href="https://hosei-u.com/"><div class="icon"><img src="img/kikaku.JPG"></div></a></td>
+            </tr>
+        </table>
+        <h2 class="center">小金井祭　ログインフォーム</h2>
+        <hr>
         <form name="loginform" action="" method="POST">
-            <div>
-                <label for="ID">団体ID:</label>
+            <label for="id">　　　団体ID:</label>
+            <div class="center">
                 <input type="text" id="id" name="id">
-                <?php if(!empty($error_id)){ ?>
-                    <p><?php echo $error_id; ?></p>
-                <?php } ?>
             </div>
-            <div>
-                <label for="password">パスワード:</label>
+            <div class="center">
+                <?php if(!empty($error['id'])){ ?>
+                    <p class="emptyerror"><?php echo $error['id']; ?></p>
+                <?php }else{
+                    echo "<br>";
+                } ?>
+            </div>
+            <label for="pass">　　　パスワード:</label>
+            <div class="center">
                 <input type="password" id="pass" name="pass">
-                <?php if(!empty($error_pass)){ ?>
-                    <p><?php echo $error_pass; ?></p>
-                <?php } ?>
-                <?php if(!empty($error)){ ?>
-                    <p><?php echo $error; ?></p>
-                <?php }?>
             </div>
-            <input type="submit" id="login" name="login" value="ログイン">
+            <div class="center">
+                <?php if(!empty($error['pass'])){ ?>
+                    <p class="emptyerror"><?php echo $error['pass']; ?></p>
+                <?php }else{
+                    echo "<br>";
+                } ?>
+                <?php if(!empty($error['input'])){ ?>
+                    <p class="inputerror"><?php echo $error['input']; ?>
+                <?php }else{
+                    echo "<br>";
+                } ?>
+            </div>
+            <div class="center">
+                <input type="submit" id="login" name="login" value="ログイン">
+            </div>
         </form>
     </body>
 </html>
