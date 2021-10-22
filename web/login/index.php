@@ -19,9 +19,9 @@ if(isset($_POST['login'])){
         try {
             
             $pdo = new PDO(
-                $_ENV["DB_DSN_test"],
-                $_ENV["DB_USERNAME_test"],
-                $_ENV["DB_PASSWORD_test"],
+                $_ENV["DB_DSN"],
+                $_ENV["DB_USERNAME"],
+                $_ENV["DB_PASSWORD"],
                 [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
