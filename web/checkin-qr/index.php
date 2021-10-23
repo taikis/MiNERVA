@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    if(!$_SESSION['id']){
+        header('Location: ../login'); 
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
