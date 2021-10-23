@@ -33,7 +33,7 @@ if(isset($_POST['login'])){
                 if ($id == $row['ID'] && password_verify($_POST['pass'], $row['pass'])){
                     $_SESSION['id'] = $row['ID'];
                     $_SESSION['auth'] = $row['auth'];
-                    header("Location: verify.php");
+                    header("Location: ../home");
                     exit();
                 } else {
                     echo '団体IDもしくはパスワードが違います';
