@@ -155,10 +155,22 @@ MINERVA.modal = (() => {
 	const modal = document.querySelector("#js-modal");
 	const modalClose = document.querySelector("#js-modal-close");
 	const entryBtn = document.querySelector("#js-entry");
+	const title = document.querySelector("#js-title");
+
 
 	function open(qrData) {
-		result.innerHTML = qrData;
-		modal.classList.add("is-show");
+		const data_parsed = qrData.match(/number=(\d{6})/);
+		if (data_parsed) {
+			title.innerHTML = "登録しますか？";
+			result.innerHTML = data_parsed[1];
+			modal.classList.add("success");
+			modal.classList.add("is-show");
+		} else {
+			title.innerHTML = "失敗";
+			result.innerHTML = "登録番号がフォーマットと一致しません。";
+			modal.classList.add("fail");
+			modal.classList.add("is-show");
+		}
 	}
 
 	function close() {
@@ -167,7 +179,9 @@ MINERVA.modal = (() => {
 	}
 
 	function entryData() {
-		MINERVA.sendData.send(result.innerHTML);
+		if(title.innerHTML != "失敗"){
+			MINERVA.sendData.send(result.innerHTML);
+		}
 		modal.classList.remove("is-show");
 		MINERVA.reader.findQR();
 	}
@@ -188,7 +202,7 @@ MINERVA.sendData = (() => {
 	const modalClose = document.querySelector("#js-alert-close");
 
 	function send(visitorId) {
-		if (!/^[A-Z]\d{6}/.test(visitorId)) {
+		if (!/^\d{6}$/.test(visitorId)) {
 			showAlert(-1);
 		} else if (!$("#drop-group").val() || !$("#drop-place").val()) {
 			showAlert(-2);
@@ -203,7 +217,7 @@ MINERVA.sendData = (() => {
 				},
 			})
 				.done((data) => {
-					console.log(data)
+					console.log(data);
 					if (data == "success") {
 						showAlert(1);
 					} else if (data == "no data") {
