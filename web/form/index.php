@@ -7,7 +7,9 @@ $dotenv->load();
 session_start();
 
 if (isset($_GET['number'])){
-    $_SESSION['number'] = $_GET['number'];
+    $reference_number = $_GET['number'];
+}else{
+    $error['reference_number'] = "整理番号がありません。正しくアクセスしてください。";
 }
 
 if (isset($_POST['signup'])) {
@@ -48,7 +50,7 @@ if (isset($_POST['signup'])) {
     }
     
 
-    if (empty($error['number']) and empty($error['name_kanji']) and empty($error['name_kana']) and empty($error['phone']) and empty($error['temp']) and empty($error['healthy'])){
+    if (empty($error['reference_number']) and empty($error['number']) and empty($error['name_kanji']) and empty($error['name_kana']) and empty($error['phone']) and empty($error['temp']) and empty($error['healthy'])){
         $number = $_POST['number'];
         $name_kanji = $_POST['name_kanji'];
         $name_kana = $_POST['name_kana'];
@@ -66,18 +68,21 @@ if (isset($_POST['signup'])) {
                 ]
             );
 
-            $stmt = $pdo->prepare('SELECT * FROM signup_test WHERE confirmation_number = ?');
-            $stmt->execute(array($number));
+            $stmt = $pdo->prepare('SELECT * FROM signup_test WHERE reference_number = :rnumber');
+            $stmt->bindValue(':rnumber',$reference_number,PDO::PARAM_STR);
+            $stmt->execute();
             if ($stmt->fetch() > 0){
-                $error['input'] = "予約番号 $number はすでに登録されています。";
+                $error['input'] = "整理番号 $reference_number はすでに登録されています。";
             }else{
-                $stmt2 = $pdo->prepare('INSERT INTO signup_test(confirmation_number,name_kanji,name_kana,phone_number,body_temperture) VALUES(:cnumber,:name_kanji,:name_kana,:phone,:temp)');
+                $stmt2 = $pdo->prepare('INSERT INTO signup_test(reference_number,confirmation_number,name_kanji,name_kana,phone_number,body_temperture) VALUES(:rnumber,:cnumber,:name_kanji,:name_kana,:phone,:temp)');
+                $stmt2->bindValue(':rnumber',$reference_number,PDO::PARAM_STR);
                 $stmt2->bindValue(':cnumber',$number,PDO::PARAM_STR);
                 $stmt2->bindValue(':name_kanji',$name_kanji, PDO::PARAM_STR);
                 $stmt2->bindValue(':name_kana',$name_kana, PDO::PARAM_STR);
                 $stmt2->bindValue(':phone',$phone, PDO::PARAM_STR);
                 $stmt2->bindValue(':temp',$temp, PDO::PARAM_STR);
                 $stmt2->execute();
+                header("Location: thanks.php");
                 exit();
             }
         }catch(PDOException $e){
@@ -124,89 +129,100 @@ if (isset($_POST['signup'])) {
         <h2 class="center">小金井祭　入場フォーム</h2>
         <hr>
         <form name="signup" action="" method="POST">
-                <div>
-                    <div class="background">
-                        <label for="number">　1. 受付番号:<br>
-                    </div>
-                    <div class="center">
-                        <input type="text" id="number" name="number" placeholder="例) A123456" value="<?php if (!empty($_SESSION['number'])){ echo $_SESSION['number'];} ?>" class="text">
-                        <?php if (!empty($error['number'])){ ?>
-                            <p class="error"><?php echo $error['number']; ?></p>
-                        <?php } ?>
-                    </div>
+            <div>
+                <div class="background">
+                    <label for="rnumber">　１. 整理番号:<br>
                 </div>
-                <div>
-                    <div class="background">
-                        <label for="name_kanji">　2. お名前:<br>
-                    </div>
-                    <div class="center">
-                        <input type="text" id="name_kanji" name="name_kanji" placeholder="例) 法政太郎" value="<?php if (!empty($_SESSION['name_kanji'])){ echo $_SESSION['name_kanji'];} ?>" class="text">
-                        <?php if (!empty($error['name_kanji'])){ ?>
-                            <p class="error"><?php echo $error['name_kanji']; ?></p>
-                        <?php } ?>
-                    </div>
-                </div>
-                <div>
-                    <div class="background">
-                        <label for="name_kana">　3. お名前(カタカナ):<br>
-                    </div>
-                    <div class="center">
-                        <input type="text" id="name_kana" name="name_kana" placeholder="例) ホウセイタロウ" value="<?php if (!empty($_SESSION['name_kana'])){ echo $_SESSION['name_kana'];} ?>" class="text">
-                        <?php if (!empty($error['name_kana'])){ ?>
-                            <p class="error"><?php echo $error['name_kana']; ?></p>
-                        <?php } ?>
-                    </div>
-                </div>
-                <div>
-                    <div class="background">
-                        <label for="phone">　4. 電話番号:<br>
-                    </div>
-                    <div class="center">
-                        <input type="text" id="phone" name="phone" placeholder="例) 09012345678" value="<?php if (!empty($_SESSION['phone'])){ echo $_SESSION['phone'];} ?>" class="text">
-                        <div class="warning">
-                            <p>-(ハイフン)なしで入力してください</p>
-                        </div>
-                        <?php if (!empty($error['phone'])){ ?>
-                            <p class="error"><?php echo $error['phone']; ?></p>
-                        <?php } ?>
-                    </div>
-                </div>
-                <div>
-                    <span>
-                        <div class="background">
-                            <label for="temp">　5. 体温:<br>
-                        </div>
-                        <div class="center">
-                            <input type="text" id="temp" name="temp" placeholder="例) 36.0" value="<?php if (!empty($_SESSION['temp'])){ echo $_SESSION['temp'];} ?>" class="temp">　度
-                            <div class="warning">
-                                <p>半角数字記号を使って入力してください</p>
-                            </div>
-                            <?php if (!empty($error['temp'])){ ?>
-                                <p class="error"><?php echo $error['temp']; ?></p>
-                            <?php } ?>
-                        </div>
-                    </span>
-                </div>
-                <div>
-                    <div class="background">
-                        <label for="healthy">　6. 健康確認:<br>
-                    </div>
-                    <div class="center">
-                        <input type="checkbox" id="healthy" name="healthy" value="healthy" <?php if (!empty($_SESSION['healthy'])){ echo "checked";} ?>>　健康です
-                        <?php if (!empty($error['healthy'])){ ?>
-                            <p class="error"><?php echo $error['healthy']; ?></p>
-                        <?php } ?>
-                    </div>
-                </div>
-                <br>
                 <div class="center">
-                    <?php if(!empty($error['input'])){ ?>
-                        <p class="inputerror"><?php echo $error['input']; ?>
+                    <p class="reference"><?php echo $reference_number; ?></p>
+                    <?php if (!empty($error['reference_number'])){ ?>
+                        <p class="error"><?php echo $error['reference_number']; ?></p>
                     <?php } ?>
                 </div>
-                <div class="center">
-                    <input type="submit" id="signup" name="signup" value="送信">
+            </div>
+            <div>
+                <div class="background">
+                    <label for="number">　２. 予約番号:<br>
                 </div>
+                <div class="center">
+                    <input type="text" id="number" name="number" placeholder="例) A123456" value="<?php if (!empty($_SESSION['number'])){ echo $_SESSION['number'];} ?>" class="text">
+                    <?php if (!empty($error['number'])){ ?>
+                        <p class="error"><?php echo $error['number']; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <div>
+                <div class="background">
+                    <label for="name_kanji">　３. お名前:<br>
+                </div>
+                <div class="center">
+                    <input type="text" id="name_kanji" name="name_kanji" placeholder="例) 法政太郎" value="<?php if (!empty($_SESSION['name_kanji'])){ echo $_SESSION['name_kanji'];} ?>" class="text">
+                    <?php if (!empty($error['name_kanji'])){ ?>
+                        <p class="error"><?php echo $error['name_kanji']; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <div>
+                <div class="background">
+                    <label for="name_kana">　４. お名前(カタカナ):<br>
+                </div>
+                <div class="center">
+                    <input type="text" id="name_kana" name="name_kana" placeholder="例) ホウセイタロウ" value="<?php if (!empty($_SESSION['name_kana'])){ echo $_SESSION['name_kana'];} ?>" class="text">
+                    <?php if (!empty($error['name_kana'])){ ?>
+                        <p class="error"><?php echo $error['name_kana']; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <div>
+                <div class="background">
+                    <label for="phone">　５. 電話番号:<br>
+                </div>
+                <div class="center">
+                    <input type="text" id="phone" name="phone" placeholder="例) 09012345678" value="<?php if (!empty($_SESSION['phone'])){ echo $_SESSION['phone'];} ?>" class="text">
+                    <div class="warning">
+                        <p>-(ハイフン)なしで入力してください</p>
+                    </div>
+                    <?php if (!empty($error['phone'])){ ?>
+                        <p class="error"><?php echo $error['phone']; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <div>
+                <span>
+                    <div class="background">
+                        <label for="temp">　６. 体温:<br>
+                    </div>
+                    <div class="center">
+                        <input type="text" id="temp" name="temp" placeholder="例) 36.0" value="<?php if (!empty($_SESSION['temp'])){ echo $_SESSION['temp'];} ?>" class="temp">　度
+                        <div class="warning">
+                            <p>半角数字記号を使って入力してください</p>
+                        </div>
+                        <?php if (!empty($error['temp'])){ ?>
+                            <p class="error"><?php echo $error['temp']; ?></p>
+                        <?php } ?>
+                    </div>
+                </span>
+            </div>
+            <div>
+                <div class="background">
+                    <label for="healthy">　７. 健康確認:<br>
+                </div>
+                <div class="center">
+                    <input type="checkbox" id="healthy" name="healthy" value="healthy" <?php if (!empty($_SESSION['healthy'])){ echo "checked";} ?>>　健康です
+                    <?php if (!empty($error['healthy'])){ ?>
+                        <p class="error"><?php echo $error['healthy']; ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <br>
+            <div class="center">
+                <?php if(!empty($error['input'])){ ?>
+                    <p class="inputerror"><?php echo $error['input']; ?>
+                <?php } ?>
+            </div>
+            <div class="center">
+                <input type="submit" id="signup" name="signup" value="送信">
+            </div>
         </form>
     </body>
 </html>

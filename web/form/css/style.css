@@ -24,6 +24,11 @@ input[type="submit"]{
     text-align: center;
 }
 
+.reference{
+    font-size: 20px;
+    letter-spacing: 0.1em;
+}
+
 .text{
     height: 25px;
     width: 170pt;
