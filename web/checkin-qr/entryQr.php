@@ -2,7 +2,7 @@
     require '../../../vendor/autoload.php';
     use Dotenv\Dotenv;
 
-    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv = Dotenv::createImmutable(__DIR__. '/..');
     $dotenv->load();
     function checkId($pdo,$confirmation_number){
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM signup_test WHERE confirmation_number = ':confirmation_number'");
