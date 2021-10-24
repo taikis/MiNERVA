@@ -100,32 +100,11 @@ if (isset($_POST['signup'])) {
     <head>
         <meta charset="UTF-8">
         <title>入場フォーム</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <link rel="stylesheet" href="css/style.css">
+        <?php include('../lib/header.php');?>
     </head>
     <body>
-        <table border="0">
-            <tr>
-                <td>
-                    <div id="Menu">
-                        <input type="checkbox" id="Check">
-                        <label id="Open" for="Check"><img src="img/menu2.png" alt="メニュー" width="50" height="50"></label>
-                        <label id="Close" for="Check"></label>
-                        <nav>
-                            <ul>
-                                <li><a href="#">ホーム</a></li>
-                                <li><a href="#">入場フォーム</a></li>
-                                <li><a href="#">ログイン</a></li>
-                                <li><a href="#">MiNERVA概要</a></li>
-                                <li><a href="https://hosei-u.com/">企画実行委員会ホームページ</a></li>
-                                <li><a href="https://koganeisai.hosei-u.com/">小金井祭ホームページ</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </td>
-                <td><a href="https://hosei-u.com/"><div class="icon"><img src="img/kikaku.JPG"></div></a></td>
-            </tr>
-        </table>
+    <?php include('../lib/menubar.php');?>
         <h2 class="center">小金井祭　入場フォーム</h2>
         <hr>
         <form name="signup" action="" method="POST">

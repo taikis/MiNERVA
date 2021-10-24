@@ -1,7 +1,7 @@
 <?php
     session_start();
-    if(!$_SESSION['id']){
-        header('Location: ../login'); 
+    if (!$_SESSION['id']) {
+        header('Location: ../login');
     }
 ?>
 
@@ -11,10 +11,15 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>MiNERVA</title>
-        <link rel="stylesheet" href="./css/app.css" />
+        <?php include('../lib/header.php');?>
         <link rel="stylesheet" href="./css/form.css" />
+        <link rel="stylesheet" href="./css/app.css" />
+        
     </head>
     <body>
+        <!----->
+        <?php include('../lib/menubar.php');?>
+        <!----->
         <div class="reader">
             <div class="center">
             <form name="checkin-form">

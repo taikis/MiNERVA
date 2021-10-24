@@ -15,33 +15,12 @@ if (!empty($_SESSION['name_kanji'])){
     <head>
         <meta charset="UTF-8">
         <title>thank you!</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <?php include('../lib/header.php');?>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <table border="0">
-            <tr>
-                <td>
-                    <div id="Menu">
-                        <input type="checkbox" id="Check">
-                        <label id="Open" for="Check"><img src="img/menu2.png" alt="メニュー" width="50" height="50"></label>
-                        <label id="Close" for="Check"></label>
-                        <nav>
-                            <ul>
-                                <li><a href="#">ホーム</a></li>
-                                <li><a href="#">入場フォーム</a></li>
-                                <li><a href="#">ログイン</a></li>
-                                <li><a href="#">MiNERVA概要</a></li>
-                                <li><a href="https://hosei-u.com/">企画実行委員会ホームページ</a></li>
-                                <li><a href="https://koganeisai.hosei-u.com/">小金井祭ホームページ</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </td>
-                <td><a href="https://hosei-u.com/"><div class="icon"><img src="img/kikaku.JPG"></div></a></td>
-            </tr>
-        </table>
-    </body>
+    <?php include('../lib/menubar.php');?>
+
     <h2 class="center"><?php echo $thx_message; ?></h2>
     <h4 class="center">小金井祭へのご参加ありがとうございます！</h4>
     <hr>
@@ -54,5 +33,5 @@ if (!empty($_SESSION['name_kanji'])){
             <p class="error"><?php echo $error['access']; ?>
         <?php } ?>
     </div>
-
+    </body>
 </html>

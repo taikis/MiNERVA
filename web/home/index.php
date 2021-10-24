@@ -30,9 +30,11 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>MiNERVA</title>
+        <?php include('../lib/header.php');?>
         <link rel="stylesheet" href="./css/app.css" />
     </head>
     <body>
+    <?php include ('../lib/menubar.php');?>
         <div><p>ようこそ、<?php
         $stmt = $pdo->query("SELECT * FROM nobu_logintest WHERE id = '". $_SESSION['id'] ."'");
         $row = $stmt->fetch();
@@ -41,13 +43,12 @@
         ?>さん</p>
         <a href="../logout"><p>ログアウト</p></a>
         </div>
-
         <div>
-            <a href="../checkin-qr/"><p>QRコードスキャン</p></a>
+            <a href="../checkin/"><p>QRコードスキャン</p></a>
             <p>来場者の登録はここから行ってください。</p>
         </div>
         <div>
-            <a href="../checkin-qr/use-form.php"><p>手動入力</p></a>
+            <a href="../checkin/use-form.php"><p>手動入力</p></a>
             <p>上のQRコードスキャンがうまくいかない場合、こちらをお使いください。</p>
         </div>
 
