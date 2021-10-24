@@ -5,7 +5,7 @@
     $dotenv = Dotenv::createImmutable(__DIR__. '/..');
     $dotenv->load();
     function checkId($pdo,$reference_number){
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM signup_test WHERE reference_number = :reference_number");
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM participant_signup WHERE reference_number = :reference_number");
         $stmt->bindValue(':reference_number', (string)$reference_number, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchColumn();
@@ -25,7 +25,7 @@
             if(!checkId($pdo,$visitor)){
                 return false;
             };
-            $stmt = $pdo->prepare('INSERT INTO qr_entry VALUES (:entry_time,:visitor_id,:group_id,:place_id)');
+            $stmt = $pdo->prepare('INSERT INTO participant_entry VALUES (:entry_time,:visitor_id,:group_id,:place_id)');
             $stmt->bindValue(':entry_time', date('Y-m-d H:i:s'), PDO::PARAM_STR);
             $stmt->bindValue(':visitor_id', (string)$visitor, PDO::PARAM_STR);
             $stmt->bindValue(':group_id', (string)$group, PDO::PARAM_STR);
