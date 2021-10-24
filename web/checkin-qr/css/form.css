@@ -12,7 +12,7 @@ input{
     margin-top: 10px;
 } 
 
-input[type="submit"]{
+input[type="botton"]{
     border-radius: 2vw;
     color: white;
     background-color: gray;

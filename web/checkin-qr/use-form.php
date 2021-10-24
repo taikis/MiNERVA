@@ -3,56 +3,81 @@
     if(!$_SESSION['id']){
         header('Location: ../login'); 
     }
-    require '../../../vendor/autoload.php';
-    use Dotenv\Dotenv;
-
-    $dotenv = Dotenv::createImmutable(__DIR__. '/..');
-    $dotenv->load();
-    try {
-        $pdo = new PDO(
-            $_ENV["DB_DSN"],
-            $_ENV["DB_USERNAME"],
-            $_ENV["DB_PASSWORD"],
-            [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]
-        );
-    } catch (PDOException $e) {
-        echo 'データベース接続エラー'.$e->getMessage();
-        exit();
-    }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="ja">
     <head>
-        <meta charset="UTF-8">
-        <title>入場フォーム</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <link rel="stylesheet" href="css/style.css">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>MiNERVA</title>
+        <link rel="stylesheet" href="./css/app.css" />
+        <link rel="stylesheet" href="./css/form.css" />
     </head>
     <body>
-        <table border="0">
-            <tr>
-                <td>
-                    <div id="Menu">
-                        <input type="checkbox" id="Check">
-                        <label id="Open" for="Check"><img src="img/menu2.png" alt="メニュー" width="50" height="50"></label>
-                        <label id="Close" for="Check"></label>
-                        <nav>
-                            <ul>
-                                <li><a href="#">ホーム</a></li>
-                                <li><a href="#">入場フォーム</a></li>
-                                <li><a href="#">ログイン</a></li>
-                                <li><a href="#">MiNERVA概要</a></li>
-                                <li><a href="https://hosei-u.com/">企画実行委員会ホームページ</a></li>
-                                <li><a href="https://koganeisai.hosei-u.com/">小金井祭ホームページ</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </td>
-                <td><a href="https://hosei-u.com/"><div class="icon"><img src="img/kikaku.JPG"></div></a></td>
-            </tr>
-        </table>
-        <h2 class="center">小金井祭　入場フォーム</h2>
+        <div class="reader">
+            <div class="center">
+            <form name="checkin-form">
+                <label for="number">整理番号:<br>
+                    <input type="text" id="number" name="number" placeholder="例) 123456" value="" class="text">
+                </label>
+                <input type="botton" id="checkin" name="checkin" onclick="send_data()" value="送信">
+            </form>
+            </div>
+        </div>
+
+        <div id="js-modal" class="modal-overlay">
+            <div class="modal">
+                <div class="modal-cnt">
+                    <span class="modal-title" id="js-title"></span>
+                    <span
+                        id="js-result"
+                        class="modal-result"
+                        value=""
+                        readonly
+                    ></span>
+                </div>
+                <button id="js-entry" class="modal-btn" target="_blank">
+                    登録
+                </button>
+                <button type="button" id="js-modal-close" class="modal-btn">
+                    閉じる
+                </button>
+            </div>
+        </div>
+
+        <div id="js-alert" class="modal-overlay">
+            <div class="modal">
+                <div class="modal-cnt">
+                    <span class="modal-title" id="js-alert-title"></span>
+                    <span
+                        id="js-alert-result"
+                        class="modal-result"
+                        value=""
+                        readonly
+                    ></span>
+                </div>
+                <button type="button" id="js-alert-close" class="modal-btn">
+                    閉じる
+                </button>
+            </div>
+        </div>
+
+        <div id="dropdown" class="drop-overlay">
+            <label for="drop-group" class="drop-label" >団体名:</label>
+            <select name="group-id" id="drop-group">
+                <option disabled selected value>選択してください</option>
+            </select>
+            <label for="drop-place" class="drop-label">場所名:</label>
+            <select name="place-id" id="drop-place">
+                <option disabled selected value>選択してください</option>
+            </select>
+
+        
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>      
+        <script src="./js/app-form.js"></script>
+    </body>
+</html>
