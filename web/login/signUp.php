@@ -14,7 +14,7 @@ $error="";
 if (isset($_POST["signUp"])) {
     if (empty($_POST["username"])) {
         $errorMessage = 'ユーザーIDが未入力です。';
-    } else if (empty($_POST["password"])) {
+    } else if (empty($_POST["password"])||empty($_POST["password2"])) {
         $errorMessage = 'パスワードが未入力です。';
     }else if (empty($_POST["group_name"])) {
         $errorMessage = '団体名が未入力です。';
@@ -39,14 +39,24 @@ if (isset($_POST["signUp"])) {
         );
         echo "接続成功".'<br>';
 
-        $pass_hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
-        $stmt->bindValue(':username',(string)$username,PDO::PARAM_INT);
-        $stmt->bindValue(':pass',(string)$pass_hash, PDO::PARAM_STR);
-        $stmt->bindValue(':auth',(string)$auth, PDO::PARAM_INT);
-        $stmt->bindValue(':group_name',(string)$group_name, PDO::PARAM_INT);
-        $stmt->execute();
-        echo "登録しました".'<br>';
+        $stmt2 = $pdo->prepare("SELECT COUNT(*) FROM nobu_logintest WHERE ID = :username");
+        $stmt2->bindValue(':username', (string)$username, PDO::PARAM_STR);
+        $stmt2->execute();
+
+        if($_POST["password"] != $_POST["password2"]){
+            echo 'パスワードが一致しません:'.'<br>';
+        }else if($stmt2->fetchColumn()){
+            echo 'すでに登録されています:'.'<br>';
+        }else{
+            $pass_hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
+            $stmt->bindValue(':username', (string)$username, PDO::PARAM_INT);
+            $stmt->bindValue(':pass', (string)$pass_hash, PDO::PARAM_STR);
+            $stmt->bindValue(':auth', (string)$auth, PDO::PARAM_INT);
+            $stmt->bindValue(':group_name', (string)$group_name, PDO::PARAM_INT);
+            $stmt->execute();
+            echo "登録しました".'<br>';
+        }
     }catch(PDOException $e){
         echo 'データベースの接続に失敗しました:'.'<br>';
         echo $e->getMessage();
@@ -73,6 +83,8 @@ if (isset($_POST["signUp"])) {
                 <label for="username">ユーザー名</label><input type="text" id="username" name="username" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["username"])) {echo htmlspecialchars($_POST["username"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
+                <br> 
+                <label for="password2">パスワード（再入力）</label><input type="password" id="password2" name="password2" value="" placeholder="もう一度パスワードを入力">
                 <br>
                 <label for="auth">権限</label><input type="auth" id="auth" name="auth" value="" placeholder="authを入力">
                 <br>
