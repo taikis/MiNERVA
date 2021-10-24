@@ -1,12 +1,10 @@
 
 .icon img{
-    width: 37pt;
-    height: 37pt;
+    width: 150pt;
 }
 
 #Menu {
     padding: 12px;
-    background: white;
 }
 
 #Check, #Close { display:none; }
@@ -58,4 +56,9 @@ nav li a{
     font-size: 20px;
     text-decoration: none;
     color: black;
+}
+
+.menu-overlay{
+    position:absolute;
+    z-index: 2;
 }

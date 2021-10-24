@@ -24,6 +24,6 @@
                         </nav>
                     </div>
                 </td>
-                <td><a href="https://hosei-u.com/"><div class="icon"><img src="/lib/img/kikaku.JPG"></div></a></td>
+                <td><a href="https://hosei-u.com/"><div class="icon"><img src="/lib/img/minerva_logo.png"></div></a></td>
             </tr>
         </table>

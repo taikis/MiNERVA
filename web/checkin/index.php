@@ -9,11 +9,14 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>MiNERVA</title>
+        <?php include('../lib/header.php');?>
         <link rel="stylesheet" href="./css/app.css" />
     </head>
     <body>
+    <div class = "menu-overlay">
+    <?php include('../lib/menubar.php');?>
+    </div>
         <div class="reader">
             <video
                 id="js-video"
