@@ -5,6 +5,9 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__. '/..');
 $dotenv->load();
 
+if (!((bool)$_SESSION['id'] && ($_SESSION['auth'] == 4))) {
+    header('Location: ../login');
+}
 
 $username="";
 $password="";

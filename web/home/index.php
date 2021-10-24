@@ -52,16 +52,18 @@
             <p>上のQRコードスキャンがうまくいかない場合、こちらをお使いください。</p>
         </div>
 
-        <?php
-        if ($_SESSION[auth] == '3') {
-            ?>
+        <?php if ($_SESSION[auth] >= 3) { ?>
         <div>
             <a href="../check-data"><p>データベース閲覧</p></a>
             <p>企画実行委員会専用ページ</p>
         </div>
-        <?php
-        }
-        ?>
+        <?php } ?>
+        <?php if ($_SESSION[auth] == 4) { ?>
+        <div>
+            <a href="../check-data"><p>新規ユーザー作成</p></a>
+            <p>企画実行委員会専用ページ</p>
+        </div>
+        <?php } ?>
 
 </body>
 </html>
