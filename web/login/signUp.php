@@ -16,19 +16,22 @@ if (isset($_POST["signUp"])) {
         $errorMessage = 'ユーザーIDが未入力です。';
     } else if (empty($_POST["password"])) {
         $errorMessage = 'パスワードが未入力です。';
+    }else if (empty($_POST["group_name"])) {
+        $errorMessage = '団体名が未入力です。';
     }
 
-    if (!empty($_POST["username"]) && !empty($_POST["password"] && !empty($_POST["auth"]))){
+    if (!empty($_POST["username"]) && !empty($_POST["password"] && !empty($_POST["auth"])) && !empty($_POST["group_name"])){
         $username = $_POST['username'];
         $password = $_POST['password'];
         $auth = $_POST['auth'];
+        $group_name = $_POST['group_name'];
     }
 
     try {
         $pdo = new PDO(
-            $_ENV["DB_DSN_test"],
-            $_ENV["DB_USERNAME_test"],
-            $_ENV["DB_PASSWORD_test"],
+            $_ENV["DB_DSN"],
+            $_ENV["DB_USERNAME"],
+            $_ENV["DB_PASSWORD"],
             [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -37,10 +40,11 @@ if (isset($_POST["signUp"])) {
         echo "接続成功".'<br>';
 
         $pass_hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth) VALUES(:username,:pass,:auth)');
-        $stmt->bindValue(':username',$username,PDO::PARAM_INT);
-        $stmt->bindValue(':pass',$pass_hash, PDO::PARAM_STR);
-        $stmt->bindValue(':auth',$auth, PDO::PARAM_INT);
+        $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
+        $stmt->bindValue(':username',(string)$username,PDO::PARAM_INT);
+        $stmt->bindValue(':pass',(string)$pass_hash, PDO::PARAM_STR);
+        $stmt->bindValue(':auth',(string)$auth, PDO::PARAM_INT);
+        $stmt->bindValue(':group_name',(string)$group_name, PDO::PARAM_INT);
         $stmt->execute();
         echo "登録しました".'<br>';
     }catch(PDOException $e){
@@ -64,6 +68,8 @@ if (isset($_POST["signUp"])) {
                 <legend>新規登録フォーム</legend>
                 <div><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></div>
                 <div><?php echo htmlspecialchars($signUpMessage, ENT_QUOTES); ?></div>
+                <label for="group_name">団体名</label><input type="group_name" id="group_name" name="group_name" value="" placeholder="名前を入力">
+                <br>
                 <label for="username">ユーザー名</label><input type="text" id="username" name="username" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["username"])) {echo htmlspecialchars($_POST["username"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
