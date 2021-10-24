@@ -68,13 +68,13 @@ if (isset($_POST['signup'])) {
                 ]
             );
 
-            $stmt = $pdo->prepare('SELECT * FROM signup_test WHERE reference_number = :rnumber');
+            $stmt = $pdo->prepare('SELECT * FROM participant_signup WHERE reference_number = :rnumber');
             $stmt->bindValue(':rnumber',$reference_number,PDO::PARAM_STR);
             $stmt->execute();
             if ($stmt->fetch() > 0){
                 $error['input'] = "整理番号 $reference_number はすでに登録されています。";
             }else{
-                $stmt2 = $pdo->prepare('INSERT INTO signup_test(reference_number,confirmation_number,name_kanji,name_kana,phone_number,body_temperture) VALUES(:rnumber,:cnumber,:name_kanji,:name_kana,:phone,:temp)');
+                $stmt2 = $pdo->prepare('INSERT INTO participant_signup(reference_number,confirmation_number,name_kanji,name_kana,phone_number,body_temperture) VALUES(:rnumber,:cnumber,:name_kanji,:name_kana,:phone,:temp)');
                 $stmt2->bindValue(':rnumber',$reference_number,PDO::PARAM_STR);
                 $stmt2->bindValue(':cnumber',$number,PDO::PARAM_STR);
                 $stmt2->bindValue(':name_kanji',$name_kanji, PDO::PARAM_STR);

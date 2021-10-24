@@ -41,7 +41,7 @@ if (isset($_POST["signUp"])) {
             ]
         );
         echo "接続成功".'<br>';
-        $stmt2 = $pdo->prepare("SELECT COUNT(*) FROM nobu_logintest WHERE ID = :username");
+        $stmt2 = $pdo->prepare("SELECT COUNT(*) FROM group_list WHERE ID = :username");
         $stmt2->bindValue(':username', (string)$username, PDO::PARAM_STR);
         $stmt2->execute();
 
@@ -51,7 +51,7 @@ if (isset($_POST["signUp"])) {
             echo 'すでに登録されています:'.'<br>';
         }else{
             $pass_hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
+            $stmt = $pdo->prepare('INSERT INTO group_list(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
             $stmt->bindValue(':username', (string)$username, PDO::PARAM_STR);
             $stmt->bindValue(':pass', (string)$pass_hash, PDO::PARAM_STR);
             $stmt->bindValue(':auth', (string)$auth, PDO::PARAM_INT);

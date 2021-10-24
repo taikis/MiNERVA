@@ -36,7 +36,7 @@
     <body>
     <?php include ('../lib/menubar.php');?>
         <div><p>ようこそ、<?php
-        $stmt = $pdo->query("SELECT * FROM nobu_logintest WHERE id = '". $_SESSION['id'] ."'");
+        $stmt = $pdo->query("SELECT * FROM group_list WHERE id = '". $_SESSION['id'] ."'");
         $row = $stmt->fetch();
         $_SESSION['group_name'] = $row['group_name'];
         echo $_SESSION['group_name'] ;

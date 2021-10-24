@@ -30,7 +30,7 @@ if(isset($_POST['login'])){
                 ]
             );
 
-                $stmt = $pdo->query("SELECT * FROM nobu_logintest WHERE id = $id");
+                $stmt = $pdo->query("SELECT * FROM group_list WHERE id = $id");
                 $row = $stmt->fetch();
                 if ($id == $row['ID'] && password_verify($_POST['pass'], $row['pass'])){
                     $_SESSION['id'] = $row['ID'];
