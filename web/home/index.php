@@ -47,7 +47,7 @@
             <p>来場者の登録はここから行ってください。</p>
         </div>
         <div>
-            <a href="../checkin-form/"><p>手動入力</p></a>
+            <a href="../checkin-qr/use-form.php"><p>手動入力</p></a>
             <p>上のQRコードスキャンがうまくいかない場合、こちらをお使いください。</p>
         </div>
 
