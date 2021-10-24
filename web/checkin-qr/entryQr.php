@@ -4,9 +4,9 @@
 
     $dotenv = Dotenv::createImmutable(__DIR__. '/..');
     $dotenv->load();
-    function checkId($pdo,$confirmation_number){
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM signup_test WHERE confirmation_number = ':confirmation_number'");
-        $stmt->bindValue(':confirmation_number', (string)$confirmation_number, PDO::PARAM_STR);
+    function checkId($pdo,$reference_number){
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM signup_test WHERE reference_number = :reference_number");
+        $stmt->bindValue(':reference_number', (string)$reference_number, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchColumn();
     }
@@ -22,21 +22,23 @@
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 ]
             );
+            if(!checkId($pdo,$visitor)){
+                return false;
+            };
+            $stmt = $pdo->prepare('INSERT INTO qr_entry VALUES (:entry_time,:visitor_id,:group_id,:place_id)');
+            $stmt->bindValue(':entry_time', date('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $stmt->bindValue(':visitor_id', (string)$visitor, PDO::PARAM_STR);
+            $stmt->bindValue(':group_id', (string)$group, PDO::PARAM_STR);
+            $stmt->bindValue(':place_id', (string)$place, PDO::PARAM_STR);
+            $stmt->execute();
+            return true;
         } catch (PDOException $e) {
             header('Content-Type: text/plain; charset=UTF-8', true, 500);
             echo $e->getMessage();
             exit($e->getMessage());
         }
-        if(!checkId($pdo,$visitor)){
-            return false;
-        };
-        $stmt = $pdo->prepare('INSERT INTO qr_entry VALUES (:entry_time,:visitor_id,:group_id,:place_id)');
-        $stmt->bindValue(':entry_time', date('Y-m-d H:i:s'), PDO::PARAM_STR);
-        $stmt->bindValue(':visitor_id', (string)$visitor, PDO::PARAM_STR);
-        $stmt->bindValue(':group_id', (string)$group, PDO::PARAM_STR);
-        $stmt->bindValue(':place_id', (string)$place, PDO::PARAM_STR);
-        $stmt->execute();
-        return true;
+
+
     }
 
 
