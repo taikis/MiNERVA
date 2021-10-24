@@ -47,7 +47,7 @@
             <p>来場者の登録はここから行ってください。</p>
         </div>
         <div>
-            <a href="../checkin-qr/"><p>手動入力</p></a>
+            <a href="../checkin-form/"><p>手動入力</p></a>
             <p>上のQRコードスキャンがうまくいかない場合、こちらをお使いください。</p>
         </div>
 
@@ -55,7 +55,7 @@
         if ($_SESSION[auth] == '2') {
             ?>
         <div>
-            <a href="../checkin-qr/"><p>データベース閲覧</p></a>
+            <a href="../check-data"><p>データベース閲覧</p></a>
             <p>企画実行委員会専用ページ</p>
         </div>
         <?php
