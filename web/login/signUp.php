@@ -6,10 +6,11 @@ $dotenv = Dotenv::createImmutable(__DIR__. '/..');
 $dotenv->load();
 
 
-$id="";
+$username="";
 $password="";
 $auth="";
 $error="";
+$group_name="";
 
 if (isset($_POST["signUp"])) {
     if (empty($_POST["username"])) {
@@ -19,7 +20,6 @@ if (isset($_POST["signUp"])) {
     }else if (empty($_POST["group_name"])) {
         $errorMessage = '団体名が未入力です。';
     }
-
     if (!empty($_POST["username"]) && !empty($_POST["password"] && !empty($_POST["auth"])) && !empty($_POST["group_name"])){
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -38,7 +38,6 @@ if (isset($_POST["signUp"])) {
             ]
         );
         echo "接続成功".'<br>';
-
         $stmt2 = $pdo->prepare("SELECT COUNT(*) FROM nobu_logintest WHERE ID = :username");
         $stmt2->bindValue(':username', (string)$username, PDO::PARAM_STR);
         $stmt2->execute();
@@ -50,10 +49,10 @@ if (isset($_POST["signUp"])) {
         }else{
             $pass_hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare('INSERT INTO nobu_logintest(ID,pass,auth,group_name) VALUES(:username,:pass,:auth,:group_name)');
-            $stmt->bindValue(':username', (string)$username, PDO::PARAM_INT);
+            $stmt->bindValue(':username', (string)$username, PDO::PARAM_STR);
             $stmt->bindValue(':pass', (string)$pass_hash, PDO::PARAM_STR);
             $stmt->bindValue(':auth', (string)$auth, PDO::PARAM_INT);
-            $stmt->bindValue(':group_name', (string)$group_name, PDO::PARAM_INT);
+            $stmt->bindValue(':group_name', (string)$group_name, PDO::PARAM_STR);
             $stmt->execute();
             echo "登録しました".'<br>';
         }
@@ -78,7 +77,7 @@ if (isset($_POST["signUp"])) {
                 <legend>新規登録フォーム</legend>
                 <div><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></div>
                 <div><?php echo htmlspecialchars($signUpMessage, ENT_QUOTES); ?></div>
-                <label for="group_name">団体名</label><input type="group_name" id="group_name" name="group_name" value="" placeholder="名前を入力">
+                <label for="group_name">団体名</label><input type="text" id="group_name" name="group_name" value="" placeholder="名前を入力">
                 <br>
                 <label for="username">ユーザー名</label><input type="text" id="username" name="username" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["username"])) {echo htmlspecialchars($_POST["username"], ENT_QUOTES);} ?>">
                 <br>
@@ -86,7 +85,7 @@ if (isset($_POST["signUp"])) {
                 <br> 
                 <label for="password2">パスワード（再入力）</label><input type="password" id="password2" name="password2" value="" placeholder="もう一度パスワードを入力">
                 <br>
-                <label for="auth">権限</label><input type="auth" id="auth" name="auth" value="" placeholder="authを入力">
+                <label for="auth">権限</label><input type="text" id="auth" name="auth" value="" placeholder="authを入力">
                 <br>
                 <input type="submit" id="signUp" name="signUp" value="新規登録">
             </fieldset>

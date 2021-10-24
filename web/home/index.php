@@ -53,7 +53,7 @@
         </div>
 
         <?php
-        if ($_SESSION[auth] == '2') {
+        if ($_SESSION[auth] == '3') {
             ?>
         <div>
             <a href="../check-data"><p>データベース閲覧</p></a>
