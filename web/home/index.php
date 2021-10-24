@@ -58,7 +58,7 @@
             <p>企画実行委員会専用ページ</p>
         </div>
         <?php } ?>
-        <?php if ($_SESSION[auth] == 4) { ?>
+        <?php if ($_SESSION[auth] == 9) { ?>
         <div>
             <a href="../check-data"><p>新規ユーザー作成</p></a>
             <p>企画実行委員会専用ページ</p>
