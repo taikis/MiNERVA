@@ -5,9 +5,9 @@
     $place_data_json = mb_convert_encoding($place_data_json, 'UTF8');
     $place_data = json_decode($place_data_json,true);
     $place_data_send = [];
-    if($_SESSION['auth'] == 1 || $_SESSION['auth'] == 2 ){
+    if($_SESSION['auth'] == 2 || $_SESSION['auth'] == 3 ){
         $place_data_send = $place_data;
-    }elseif ($_SESSION['id'] && $_SESSION['auth'] == 0) {
+    }elseif ($_SESSION['id'] && $_SESSION['auth'] == 1) {
         $key = array_search( $_SESSION['id'], array_column($place_data, 'group_id'));
         $place_data_send[] = $place_data[$key];
     }
