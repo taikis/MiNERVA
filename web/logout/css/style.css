@@ -1,0 +1,110 @@
+html, body{ 
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    height: 100%;
+    font-family: sans-serif;
+    width: 100%;
+    max-width: 280pt;
+}
+
+input{
+    margin-top: 10px;
+} 
+
+input[type="submit"]{
+    border-radius: 2vw;
+    color: white;
+    background-color: gray;
+    width: 100px;
+    line-height: 20px;
+    width: 50%;
+    height: 30pt;
+    font-size: 15px;
+    text-align: center;
+}
+
+input[type="text"],input[type="password"]{
+    height: 25px;
+    font-size: 20px;
+}
+
+.center{
+    text-align: center;
+}
+
+.emptyerror{
+    color:red;
+    font-size: small;
+}
+
+.inputerror{
+    color: red;
+    background-color: mistyrose;
+    line-height: 30pt;
+}
+
+.icon img{
+    width: 37pt;
+    height: 37pt;
+}
+
+table{
+    margin-bottom: -7%;
+}
+
+#Menu {
+    padding: 12px;
+    background: white;
+}
+
+#Check, #Close { display:none; }
+#Open {
+    display: block;
+    /* width: 58px; */
+    cursor: pointer;
+}
+
+#Close, nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+#Close {
+    z-index: 2;
+    width: 100%;
+    background: gray;
+    opacity: 0.8;
+    transition: 0.5s;
+}
+nav {
+    z-index: 3;
+    width: 330px;
+    background: white;
+    transition: 0.7s;
+    transform: translateX(-100%);
+}
+#Check:checked ~ #Close { display: block; }
+#Check:checked ~ nav {
+    transform: translateX(0);
+}
+nav ul{
+    list-style: none;
+}
+
+nav li{
+    padding: 15px 0;
+    margin: 10px 0;
+}
+
+nav li:hover{
+    opacity: 0.5;
+}
+
+nav li a{
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+}
