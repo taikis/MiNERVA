@@ -163,11 +163,13 @@ MINERVA.modal = (() => {
 		if (data_parsed) {
 			title.innerHTML = "登録しますか？";
 			result.innerHTML = data_parsed[1];
+			modal.classList.remove("fail");
 			modal.classList.add("success");
 			modal.classList.add("is-show");
 		} else {
 			title.innerHTML = "失敗";
 			result.innerHTML = "登録番号がフォーマットと一致しません。";
+			modal.classList.remove("success");
 			modal.classList.add("fail");
 			modal.classList.add("is-show");
 		}
@@ -240,9 +242,11 @@ MINERVA.sendData = (() => {
 	function showAlert(parameter) {
 		if (0 < parameter) {
 			title.innerHTML = "送信成功";
+			modal.classList.remove("fail");
 			modal.classList.add("success");
 		} else {
 			title.innerHTML = "送信失敗";
+			modal.classList.remove("success");
 			modal.classList.add("fail");
 		}
 		switch (parameter) {
@@ -256,10 +260,10 @@ MINERVA.sendData = (() => {
 				result.innerHTML = "団体名と場所を指定してください";
 				break;
 			case -3:
-				result.innerHTML = "サーバーエラー\n時間をおいてください";
+				result.innerHTML = "サーバーエラー<br>時間をおいてください";
 				break;
 			case -4:
-				result.innerHTML = "登録されていない番号です";
+				result.innerHTML = "登録されていない番号です。<br>来場者の方にQRコードを読み取っていただき、初回登録を促してください。";
 				break;
 		}
 		modal.classList.add("is-show");
