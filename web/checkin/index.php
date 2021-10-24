@@ -81,7 +81,7 @@
 
         <div id="js-unsupported" class="unsupported">
             <p class="unsupported-title">サポート外</p>
-            <p>ブラウザが対応していません<br><a href="../checkin-form/">Googleフォームでチェックイン</a></b></p>
+            <p>ブラウザが対応していません<br><a href="./use-form.php">手動でチェックイン</a></b></p>
         </div>
         
         <script
