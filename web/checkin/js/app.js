@@ -60,12 +60,14 @@ MINERVA.reader = (() => {
 		const ctx = canvas.getContext("2d");
 		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 		const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-		const code = jsQR(imageData.data, canvas.width, canvas.height);
+		const code = jsQR(imageData.data, imageData.width, imageData.height,{
+			inversionAttempts: "dontInvert",
+		});
 
 		if (code) {
 			MINERVA.modal.open(code.data);
 		} else {
-			setTimeout(findQR, 500);
+			setTimeout(findQR, 10);
 		}
 	}
 
