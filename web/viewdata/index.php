@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!((bool)$_SESSION['id'] && ($_SESSION['auth'] == 3))) {
+if (!((bool)$_SESSION['id'] && ($_SESSION['auth'] >= 3))) {
     header('Location: ../login');
 }
 

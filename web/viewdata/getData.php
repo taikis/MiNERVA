@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!((bool)$_SESSION['id'] && ($_SESSION['auth'] == 3))) {
+if (!((bool)$_SESSION['id'] && ($_SESSION['auth'] >= 3))) {
     header('Content-Type: text/plain; charset=UTF-8', true, 403);
 } else {
     header("Content-Type: application/json; charset=UTF-8");
