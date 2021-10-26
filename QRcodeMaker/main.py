@@ -57,5 +57,3 @@ while(reference_number < 25):
     cmd = ['lpr','-P','OKI_C824_B17B35','-o','fit-to-page' ,os.path.dirname(__file__)+ '/latex/join-rotated90.pdf']
 
     subprocess.run(cmd,cwd=os.path.dirname(__file__)+ '/latex/')
-
-    #/Users/sugawarataiki/opt/anaconda3/envs/qrcode/bin/python /Users/sugawarataiki/souce/minerva/QRcodeMaker/main.py
