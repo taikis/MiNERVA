@@ -54,7 +54,7 @@
 
         <?php if ($_SESSION[auth] >= 3) { ?>
         <div>
-            <a href="../check-data"><p>データベース閲覧</p></a>
+            <a href="../viewdata"><p>データベース閲覧</p></a>
             <p>企画実行委員会専用ページ</p>
         </div>
         <?php } ?>
