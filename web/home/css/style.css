@@ -1,0 +1,19 @@
+.column{
+    padding: 1rem 3rem;
+    color: #fff;
+    border-radius: 100vh;
+    background-image: -webkit-gradient(linear, right top, left top, from(#72cb24), to(#19a473));
+    background-image: -webkit-linear-gradient(right, #72cb24 0%, #19a473 100%);
+    background-image: linear-gradient(to left, #72cb24 0%, #19a473 100%);
+    margin: 7px 7px;
+  }
+
+.column a {
+    display: block;
+    color:#fff;
+    text-decoration: none;
+
+}
+.column a:hover {
+    text-decoration: underline #fff;
+  }
