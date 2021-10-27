@@ -62,8 +62,8 @@
             <a href="../login/signUp.php">新規ユーザー作成<br>
             企画実行委員会専用ページ</p>
         </div>
-        <a href="../logout"><p>ログアウト</p></a>
         <?php } ?>
+        <a href="../logout"><p>ログアウト</p></a>
 
 </body>
 </html>
