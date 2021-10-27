@@ -67,7 +67,7 @@ MINERVA.reader = (() => {
 		if (code) {
 			MINERVA.modal.open(code.data);
 		} else {
-			setTimeout(findQR, 10);
+			setTimeout(findQR, 20);
 		}
 	}
 
