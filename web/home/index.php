@@ -60,7 +60,7 @@
         <?php if ($_SESSION[auth] == 9) { ?>
             <div class = 'column'>
             <a href="../login/signUp.php">新規ユーザー作成<br>
-            企画実行委員会専用ページ</p>
+            企画実行委員会専用ページ</p></a>
         </div>
         <?php } ?>
         <p>ログアウトは、左上のメニューから行ってください。</p>
