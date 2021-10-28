@@ -54,7 +54,7 @@
         <?php if ($_SESSION[auth] >= 3) { ?>
         <div class = 'column'>
             <a href="../viewdata">データベース閲覧<br>
-            企画実行委員会専用ページ</p>
+            企画実行委員会専用ページ</p></a>
         </div>
         <?php } ?>
         <?php if ($_SESSION[auth] == 9) { ?>
