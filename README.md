@@ -33,7 +33,10 @@ Copyright (c) Afshin Mehrabani afshin.meh@gmail.com
 
 ## 使用にあたって
 
-全力でサポートいたします。[@taikis_jp](https://twitter.com/taikis_jp)までご連絡ください。  
+下記に該当する場合、サーバーの立ち上げから全力でサポートいたします。[@taikis_jp](https://twitter.com/taikis_jp)までご連絡ください。  
+- 学生行事
+- 小金井市で行われる非営利行事
+
 また、このシステムのソースコードはGPL-3.0 Licenseで誰でも使用できます。  
 
 ## contribute
