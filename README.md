@@ -31,6 +31,11 @@ by Cosmo Wolfe
 Copyright (c) Afshin Mehrabani afshin.meh@gmail.com  
 ([MIT License](https://github.com/grid-js/gridjs/blob/master/LICENSE))
 
+## 使用にあたって
+
+全力でサポートいたします。[@taikis_jp](https://twitter.com/taikis_jp)までご連絡ください。  
+また、このシステムのソースコードはGPL-3.0 Licenseで誰でも使用できます。  
+
 ## contribute
 
 環境によって動かないなど、さまざまな問題があります。   
