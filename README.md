@@ -2,6 +2,11 @@
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/60678028/144098618-e6d5ad57-76b2-4993-8f4c-9ca6fdadea67.png" width="500px">
+  <br>
+  <img src="https://img.shields.io/github/v/release/taikis/minerva">
+  <img src="https://img.shields.io/github/languages/top/taikis/minerva">
+  <img src="https://img.shields.io/github/languages/count/taikis/minerva">
+  <a href="https://qiita.com/taikis/items/44d0eae5a9b147e7aba7"><img src="https://img.shields.io/badge/Qiita-article-55C500"></a>
 </div>
   
 来場者の行動履歴を追跡することができる、入室管理システムです。  
