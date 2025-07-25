@@ -1,0 +1,85 @@
+// Schema for Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  groupId   String?
+  group     Group?   @relation(fields: [groupId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  USER
+}
+
+model Visitor {
+  id                String   @id @default(uuid())
+  referenceNumber   String   @unique
+  confirmationNumber String
+  nameKanji         String
+  nameKana          String
+  phoneNumber       String
+  bodyTemperature   String
+  registeredAt      DateTime @default(now())
+  entries           Entry[]
+
+  @@map("visitors")
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  users     User[]
+  places    Place[]
+  entries   Entry[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("groups")
+}
+
+model Place {
+  id        String   @id @default(uuid())
+  name      String
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id])
+  entries   Entry[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([groupId, name])
+  @@map("places")
+}
+
+model Entry {
+  id        String   @id @default(uuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id])
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id])
+  timestamp DateTime @default(now())
+
+  @@index([visitorId])
+  @@index([groupId])
+  @@index([placeId])
+  @@map("entries")
+}
